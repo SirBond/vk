@@ -6,3 +6,7 @@
   ul .item a:hover {
     color: red;
   }
+
+  ul .item a.activ {
+    color: red;
+  }
