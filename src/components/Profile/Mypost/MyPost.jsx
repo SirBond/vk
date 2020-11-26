@@ -1,23 +1,28 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import s from './MyPost.module.css'
 import Post from './Post/Post'
 
-function MyPost() {
+function MyPost(props) {
 
-    let PostData = [
-        {id: 1, img: 'https://sun3-11.userapi.com/c857732/v857732789/5e846/Eo5Njv85rc4.jpg?ava=1', post: 'Пост1'},
-        {id: 2, img: 'https://sun3-11.userapi.com/c857732/v857732789/5e846/Eo5Njv85rc4.jpg?ava=1', post: 'Пост2'},
-        {id: 3, img: 'https://sun3-11.userapi.com/c857732/v857732789/5e846/Eo5Njv85rc4.jpg?ava=1', post: 'Пост3'},
-    ]
+    let newNextElement = createRef()
+
+    let addPost = () => {
+        let text = newNextElement.current.value
+        props.addPost(text)
+    }
     
     return (
         <div className='my-post'>
             <div className='mess'>
+                <textarea ref={newNextElement}></textarea>
+                <div>
+                    <button onClick={ addPost }>Отправить</button>
+                </div>
 
             </div>
             <div className='all-post'>
                 <ul>
-                    <Post PostData={PostData} />
+                    <Post PostData={props.PostData} />
                 </ul>
             </div>
         </div>
