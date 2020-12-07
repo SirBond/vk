@@ -1,19 +1,18 @@
 import React, { createRef } from 'react'
 import s from './MyPost.module.css'
 import Post from './Post/Post'
-import {addPostActionCreate, addPostTextActionCreate} from './../../../redux/state'
 
 function MyPost(props) {
-
     let newNextElement = createRef()
 
-    let addPost = () => {
-        props.dispatch(addPostActionCreate())
+    let onAddPost = () => {
+        props.addPost()
     }
 
     let onPostChange = () => {
         let text = newNextElement.current.value
-        props.dispatch(addPostTextActionCreate(text))
+    
+        props.updateNewPostText(text)
     }
     
     return (
@@ -21,7 +20,7 @@ function MyPost(props) {
             <div className='mess'>
                 <textarea value={props.newPostText} ref={newNextElement} onChange={onPostChange}></textarea>
                 <div>
-                    <button onClick={ addPost }>Отправить</button>
+                    <button onClick={ onAddPost }>Отправить</button>
                 </div>
 
             </div>
