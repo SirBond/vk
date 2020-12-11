@@ -9,6 +9,7 @@ const Navbar = () => {
             <ul>
                 <li className={`${c.item}`}><NavLink activeClassName={c.activ} to="/profile">Профиль</NavLink></li>
                 <li className={c.item}><NavLink activeClassName={c.activ} to="/dialog">Мессенджер</NavLink></li>
+                <li className={c.item}><NavLink activeClassName={c.activ} to="/users">Пользователи</NavLink></li>
                 <li className={c.item}><NavLink activeClassName={c.activ} to="/news">Новости</NavLink></li>
                 <li className={c.item}><NavLink activeClassName={c.activ} to="/music">Музыка</NavLink></li>
                 <li className={c.item}><NavLink activeClassName={c.activ} to="/settings">Настройки</NavLink></li>
