@@ -1,31 +1,41 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addUsersAC, currentPageAC, setUsersAC } from '../../../redux/users-reducer'
+import { getUsersFallowedThunkCreator, getUsersThunkCreator} from '../../../redux/users-reducer'
 import UsersItem from './UsersItem'
-import * as axios from 'axios'
+import Loading from '../../Loading'
+import { Redirect, withRouter } from 'react-router-dom'
+import { HocRedirect } from '../../../hoc/HocRedirect'
+import { compose } from 'redux'
 
 class UsersApiContainer extends React.Component {
 
   componentDidMount() {
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users/?page=${this.props.currentPage}&count=${this.props.pageSize}`).then(response => {
-          this.props.setUsers(response.data.items, response.data.totalCount)
-      })
+    // this.props.setIsFetching(true)
+    // getUsers(this.props.currentPage, this.props.pageSize).then(data => {
+    //   this.props.setIsFetching(false)
+    //   this.props.setUsers(data.items, data.totalCount)
+    // })
+    this.props.getUsersThunkCreator(this.props.currentPage, this.props.pageSize)
       
   }
 
-  onClickUpdate = (id) => {
-      this.props.updateFollowed(id)
+  onClickUpdate = (followed, id) => {
+    this.props.getUsersFallowedThunkCreator(followed ,id)
   }
-
+  
   onPageCurrent = (page) => {
-      debugger
-      this.props.setCurrentPage(page)
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users/?page=${page}&count=${this.props.pageSize}`).then(response => {
-          this.props.setUsers(response.data.items, response.data.totalCount)
-      })
+    this.props.getUsersThunkCreator(page, this.props.pageSize)
+    // this.props.setCurrentPage(page)
+    // this.props.setIsFetching(true)
+    // getUsers(page, this.props.pageSize).then(data => {
+    //   this.props.setIsFetching(false)
+    //   this.props.setUsers(data.items, data.totalCount)
+    // })
   }
   render() {
-      return <UsersItem totalCount={this.props.totalCount} pageSize={this.props.pageSize} currentPage={this.props.currentPage} UsersData={this.props.UsersData} onClickUpdate={this.onClickUpdate} onPageCurrent={this.onPageCurrent} />
+    return <> {this.props.isFetching ? <Loading /> :
+    <UsersItem totalCount={this.props.totalCount} pageSize={this.props.pageSize} currentPage={this.props.currentPage} UsersData={this.props.UsersData} onClickUpdate={this.onClickUpdate} onPageCurrent={this.onPageCurrent} />}
+    </>
   }
 }
 
@@ -35,11 +45,12 @@ let mapStateToProps = (state) => {
     UsersData: state.users.UsersData,
     pageSize: state.users.pageSize,
     totalCount: state.users.totalCount,
-    currentPage: state.users.currentPage
+    currentPage: state.users.currentPage,
+    isFetching: state.users.isFetching,
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
+/*let mapDispatchToProps = (dispatch) => {
   return {
     updateFollowed: (id) => {
       dispatch(addUsersAC(id)) 
@@ -49,10 +60,20 @@ let mapDispatchToProps = (dispatch) => {
     },
     setCurrentPage: (page) => {
       dispatch(currentPageAC(page))
+    },
+    setIsFetching: (e) => {
+      dispatch(isFetchingAC(e))
     }
   }
+}*/
+
+let mapDispatchToProps = {
+  getUsersFallowedThunkCreator,
+  getUsersThunkCreator
 }
 
-const UsersItemContainer = connect(mapStateToProps,mapDispatchToProps)(UsersApiContainer)
-
-export default UsersItemContainer
+export default compose(
+  connect(mapStateToProps,mapDispatchToProps),
+  withRouter,
+  HocRedirect,
+)(UsersApiContainer)

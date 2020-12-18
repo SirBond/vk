@@ -1,8 +1,9 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import s from './../Dialog.module.css'
 
 const MessageItem = (props) => {
-  
+
   let mess = props.messageData.map(value => <div key={value.id} className={s.message}>{value.message}</div>)
 
   function onChangeMessText(e){

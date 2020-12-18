@@ -1,5 +1,6 @@
 import React, { createRef } from 'react'
 import { connect } from 'react-redux'
+import { HocRedirect } from '../../../hoc/HocRedirect'
 import {addMessActionCreate, addMessTextActionCreate} from '../../../redux/message-reducer'
 import MessageItem from './Messageitem'
 
@@ -7,7 +8,7 @@ import MessageItem from './Messageitem'
 let mapStateToProps = (state) => {
   return {
     messageData: state.mess.messageData,
-    newMessText: state.mess.newMessText
+    newMessText: state.mess.newMessText,
   }
 }
 
@@ -22,5 +23,5 @@ let mapDispatchToProps = (dispatch) => {
   }
 }
 
-const MessageItemContainer = connect(mapStateToProps, mapDispatchToProps)(MessageItem)
+const MessageItemContainer = connect(mapStateToProps, mapDispatchToProps)(HocRedirect(MessageItem))
 export default MessageItemContainer
