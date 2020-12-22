@@ -33,8 +33,20 @@ export const getProfile = (userId) => {
   })
 }
 
+export const getProfileStatus = (userId) => {
+  return instals.get(`profile/status/${userId}`).then(response => {
+    return response.data
+  })
+}
+
 export const getAuthUser = () => {
    return instals.get(`auth/me`).then(response => {
     return response.data        
+  })
+}
+
+export const editUserStatus = (status) => {
+  return instals.put('/profile/status', { status }).then(response => {
+    return response.data
   })
 }

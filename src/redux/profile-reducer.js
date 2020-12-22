@@ -1,9 +1,10 @@
-import { getProfile } from "../api/api"
+import { editUserStatus, getProfile, getProfileStatus } from "../api/api"
 
 const ADD_POST_TEXT = 'ADD-POST-TEXT'
 const ADD_POST = 'ADD-POST'
 const SET_USER = 'SET-USER'
 const IS_FETCHING = 'IS=FETCHING'
+const EDIT_STATUS = 'EDIT-STATUS'
 
 let init = { 
   Profile: [],
@@ -13,6 +14,7 @@ let init = {
     {id: 3, img: 'https://sun3-11.userapi.com/c857732/v857732789/5e846/Eo5Njv85rc4.jpg?ava=1', post: 'Пост3'},
   ],
     newPostText: 'Hi, Roman',
+    status: null,
     isFetching: false
 }
 
@@ -27,9 +29,17 @@ const profileReducer = (state = init, action) => {
       }
       return {...state, newPostText: '', PostData: [ ...state.PostData, newObj]  }
     case SET_USER:
-      return {...state, Profile: action.user }
+      let status = null
+      if(action.status) {
+        status = action.status
+      } else {
+        status = 'Мой статус'
+      }
+      return {...state, Profile: action.user, status: status }
     case ADD_POST_TEXT:
-      return {...state, newPostText: action.text}     
+      return {...state, newPostText: action.text}
+    case EDIT_STATUS:
+      return {...state, status: action.status}  
     case IS_FETCHING:
       return {...state, isFetching: action.e}
     default:
@@ -41,15 +51,30 @@ export default profileReducer
 
 export const addPostActionCreate = () => ({type: ADD_POST})
 export const addPostTextActionCreate = (text) => ({type: ADD_POST_TEXT, text: text})
-const addProfileAC = (user) => ({type: SET_USER, user: user})
+const addProfileAC = (user, status) => ({type: SET_USER, user: user, status: status})
 export const isFetchingAC = (e) => ({type: IS_FETCHING, e: e})
+const editPosStatusAC = (status) => ({type: EDIT_STATUS, status: status})
 
-export const getProfileThunkCreator = (id) => {
+export const getProfileThunkCreator = (id, mayId = 13275) => {
   return (dispatch) => {
     dispatch(isFetchingAC(true))
     getProfile(id).then(data => {
-      dispatch(addProfileAC(data))
-      dispatch(isFetchingAC(false))
+      getProfileStatus(mayId).then(dataSt => {
+        dispatch(addProfileAC(data, dataSt))
+        dispatch(isFetchingAC(false))
+      })
     })
+  }
+}
+
+export const getProfileStatusThunkCreator = (status) => {
+  return () => {
+    editUserStatus(status)
+  }
+}
+
+export const getTextStatusTC = (text) => {
+  return (dispatch) => {
+    dispatch(editPosStatusAC(text))
   }
 }

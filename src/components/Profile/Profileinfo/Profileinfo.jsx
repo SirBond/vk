@@ -3,7 +3,6 @@ import s from './Profileinfo.module.css'
 
 const ProfileInfo = (props) => {
   //alert(props.isAuth)
-  debugger
   return (
     <div>
       <img src='https://www.clearleecounselling.co.uk/wp-content/uploads/2017/06/mountainsbanner.png-1-1024x300.jpg' alt='' />
