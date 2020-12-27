@@ -50,3 +50,15 @@ export const editUserStatus = (status) => {
     return response.data
   })
 }
+
+export const loginApi = (email, password, rememberMe = false) => {
+  return instals.post('/auth/login', {email, password, rememberMe}).then(response => {
+    return response.data
+  })
+}
+
+export const logoutApi = () => {
+  return instals.delete('/auth/login').then(response => {
+    return response.data
+  })
+}

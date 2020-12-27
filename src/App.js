@@ -10,25 +10,43 @@ import Settings from './components/Settings/Settings'
 import Users from './components/Users/Users'
 import HeaderContainer from './components/Header/HeaderContainer'
 import LoginContainer from './components/Login/LoginContainer'
+import { connect } from 'react-redux'
+import { addUserDataThunk } from './redux/auth-reducer'
+import { iniTC } from './redux/app-reducer'
+import Loading from './components/Loading'
 
-function App(props) {
-  return (
-    <BrowserRouter>
-      <div className='grid'>
-        <HeaderContainer />
-        <Navbar />
-        <div className='content'>
-          <Route path='/profile/:userId?' render={() => <Profile />} />
-          <Route path='/dialog' render={() => <Dialog dialogData={props.dialogData} />} />
-          <Route path='/users' render={() => <Users />} />
-          <Route path='/news' render={() => <News />} />
-          <Route path='/music' render={() => <Music />} />
-          <Route path='/settings' render={() => <Settings />} />
-          <Route path='/login' render={() => <LoginContainer />} />
+class App extends React.Component {
+  componentDidMount() {
+    this.props.iniTC()
+  }
+
+  render() {
+
+    if(!this.props.ini) {
+      return <Loading />
+    }
+    return (
+      <BrowserRouter>
+        <div className='grid'>
+          <HeaderContainer />
+          <Navbar />
+          <div className='content'>
+            <Route path='/profile/:userId?' render={() => <Profile />} />
+            <Route path='/dialog' render={() => <Dialog dialogData={this.props.dialogData} />} />
+            <Route path='/users' render={() => <Users />} />
+            <Route path='/news' render={() => <News />} />
+            <Route path='/music' render={() => <Music />} />
+            <Route path='/settings' render={() => <Settings />} />
+            <Route path='/login' render={() => <LoginContainer />} />
+          </div>
         </div>
-      </div>
-    </BrowserRouter>
-  );
+      </BrowserRouter>
+    )
+  }  
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  ini: state.app.ini
+})
+
+export default connect(mapStateToProps, {iniTC: iniTC})(App)

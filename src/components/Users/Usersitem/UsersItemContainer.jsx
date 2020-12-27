@@ -6,6 +6,7 @@ import Loading from '../../Loading'
 import { Redirect, withRouter } from 'react-router-dom'
 import { HocRedirect } from '../../../hoc/HocRedirect'
 import { compose } from 'redux'
+import { usersData } from '../../../redux/users-selectors'
 
 class UsersApiContainer extends React.Component {
 
@@ -40,15 +41,25 @@ class UsersApiContainer extends React.Component {
 }
 
 
-let mapStateToProps = (state) => {
-  return {
-    UsersData: state.users.UsersData,
-    pageSize: state.users.pageSize,
-    totalCount: state.users.totalCount,
-    currentPage: state.users.currentPage,
-    isFetching: state.users.isFetching,
-  }
-}
+// let mapStateToProps = (state) => ({
+  
+//     UsersData: state.users.UsersData,
+//     pageSize: state.users.pageSize,
+//     totalCount: state.users.totalCount,
+//     currentPage: state.users.currentPage,
+//     isFetching: state.users.isFetching,
+  
+// })
+
+let mapStateToProps = (state) => ({
+  
+  UsersData: usersData(state),
+  pageSize: state.users.pageSize,
+  totalCount: state.users.totalCount,
+  currentPage: state.users.currentPage,
+  isFetching: state.users.isFetching,
+
+})
 
 /*let mapDispatchToProps = (dispatch) => {
   return {
